@@ -34,5 +34,5 @@ jobs:
         username: ${{ secrets.PLESK_USER }}
         password: ${{ secrets.PLESK_PASS }}
         port: 21
-        local-dir: ./publish
+        local-dir: ./publish/
         server-dir: /httpdocs/
