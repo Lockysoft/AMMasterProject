@@ -34,12 +34,19 @@ jobs:
 
     # Publish edilen dosyaları FTP ile Plesk server’a gönder
     - name: Deploy via FTP
-      uses: SamKirkland/FTP-Deploy-Action@4.3.0
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.0
       with:
         server: ${{ secrets.PLESK_HOST }}
         username: ${{ secrets.PLESK_USER }}
         password: ${{ secrets.PLESK_PASS }}
         port: 21
-        local-dir: ./publish/       # / ile bitmeli
-        server-dir: /httpdocs/      # Plesk’teki home directory yolu
-        use-pasv: true              # Pasif mod, firewall sorunlarını önler
+        protocol: ftps              # FTPS daha güvenli ve stabil
+        passive: true               # pasif mod
+        local-dir: ./publish/       # publish edilen dosyaların yolu
+        server-dir: /httpdocs/      # Plesk’teki site root’u
+        retries: 3                  # başarısız olursa yeniden dene
+        timeout: 60000              # 60sn timeout
+        exclude: |                  # gereksiz dosyaları yükleme
+          **/node_modules/**
+          **/.git/**
+          **/.github/**
