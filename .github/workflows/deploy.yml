@@ -10,43 +10,43 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # Repo’yu checkout et
-    - name: Checkout repository
-      uses: actions/checkout@v3
+      # Repo’yu checkout et
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-    # .NET 7 kurulumu
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: '7.0.x'
+      # .NET 7 kurulumu
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '7.0.x'
 
-    # Bağımlılıkları yükle
-    - name: Restore dependencies
-      run: dotnet restore AMMasterProject/AMMasterProject.csproj
+      # Bağımlılıkları yükle
+      - name: Restore dependencies
+        run: dotnet restore AMMasterProject/AMMasterProject.csproj
 
-    # Projeyi build et
-    - name: Build project
-      run: dotnet build AMMasterProject/AMMasterProject.csproj --configuration Release --no-restore
+      # Projeyi build et
+      - name: Build project
+        run: dotnet build AMMasterProject/AMMasterProject.csproj --configuration Release --no-restore
 
-    # Projeyi publish et
-    - name: Publish project
-      run: dotnet publish AMMasterProject/AMMasterProject.csproj --configuration Release --output ./publish/
+      # Projeyi publish et
+      - name: Publish project
+        run: dotnet publish AMMasterProject/AMMasterProject.csproj --configuration Release --output ./publish/
 
-    # Publish edilen dosyaları FTP ile Plesk server’a gönder
-    - name: Deploy via FTP
-      uses: SamKirkland/FTP-Deploy-Action@v4.3.0
-      with:
-        server: ${{ secrets.PLESK_HOST }}
-        username: ${{ secrets.PLESK_USER }}
-        password: ${{ secrets.PLESK_PASS }}
-        port: 21
-        protocol: ftps              # FTPS daha güvenli ve stabil
-        passive: true               # pasif mod
-        local-dir: ./publish/       # publish edilen dosyaların yolu
-        server-dir: /httpdocs/      # Plesk’teki site root’u
-        retries: 3                  # başarısız olursa yeniden dene
-        timeout: 60000              # 60sn timeout
-        exclude: |                  # gereksiz dosyaları yükleme
-          **/node_modules/**
-          **/.git/**
-          **/.github/**
+      # Publish edilen dosyaları FTP ile Plesk server’a gönder
+      - name: Deploy via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.0
+        with:
+          server: ${{ secrets.PLESK_HOST }}
+          username: ${{ secrets.PLESK_USER }}
+          password: ${{ secrets.PLESK_PASS }}
+          port: 21
+          protocol: ftps              # FTPS daha güvenli ve stabil
+          passive: true               # pasif mod
+          local-dir: ./publish/       # publish edilen dosyaların yolu
+          server-dir: /httpdocs/      # Plesk’teki site root’u
+          retries: 3                  # başarısız olursa yeniden dene
+          timeout: 60000              # 60sn timeout
+          exclude: |                  # gereksiz dosyaları yükleme
+            **/node_modules/**
+            **/.git/**
+            **/.github/**
