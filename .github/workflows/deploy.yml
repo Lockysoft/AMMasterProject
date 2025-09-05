@@ -46,6 +46,7 @@ jobs:
           server-dir: /httpdocs/      # Plesk’teki site root’u
           retries: 3                  # başarısız olursa yeniden dene
           timeout: 60000              # 60sn timeout
+          verbose: true               # detaylı log için
           exclude: |                  # gereksiz dosyaları yükleme
             **/node_modules/**
             **/.git/**
